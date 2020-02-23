@@ -1,7 +1,4 @@
-﻿# CMakeList.txt : CMake project for OpenISO, include source and define
-# project specific logic here.
-#
-cmake_minimum_required (VERSION 3.8)
+﻿cmake_minimum_required (VERSION 3.8)
 
 project ("OpenISO" VERSION 0.1)
 
@@ -10,15 +7,19 @@ option(OISO_LUA_SUPPORT "Enable Lua support" YES)
 configure_file(cmake_bridge.h.in cmake_bridge.h)
 
 # Add source to this project's executable.
-add_executable (OpenISO "OpenISO.cpp" "OpenISO.h")
+add_executable (OpenISO "OpenISO.cpp" "OpenISO.h"
+		"instance.cpp" "instance.hh"
+		"debug.cpp" "debug.hpp"
+		"sdl_kbstate.cpp" "sdl_kbstate.hh")
+# target_sources (OpenISO PUBLIC "game/game.cpp")
 
 add_subdirectory("game")
-
-find_package(Vulkan REQUIRED)
+target_link_libraries(OpenISO "${CMAKE_BINARY_DIR}/game/Game.lib")
 
 target_link_directories(OpenISO PUBLIC "lib")
 target_link_directories(OpenISO PUBLIC "lib/x64")
 target_include_directories(OpenISO PRIVATE "include")
+
 if(MSVC)
 	configure_file("lib/x64/SDL2.dll" "${CMAKE_BINARY_DIR}/SDL2.dll" COPYONLY)
 	configure_file("lib/x64/libjpeg-9.dll" "${CMAKE_BINARY_DIR}/libjpeg-9.dll" COPYONLY)
@@ -29,10 +30,11 @@ if(MSVC)
 	configure_file("lib/x64/zlib1.dll" "${CMAKE_BINARY_DIR}/zlib1.dll" COPYONLY)
 endif()
 
+file(COPY "game/res" DESTINATION "${CMAKE_BINARY_DIR}")
+
 target_link_libraries(OpenISO "${CMAKE_CURRENT_LIST_DIR}/lib/x64/SDL2.lib")
 target_link_libraries(OpenISO "${CMAKE_CURRENT_LIST_DIR}/lib/x64/SDL2main.lib")
 target_link_libraries(OpenISO "${CMAKE_CURRENT_LIST_DIR}/lib/x64/SDL2_image.lib")
-target_link_libraries(OpenISO "${CMAKE_BINARY_DIR}/game/TheGame.lib")
 # find_library(SDL2 NAMES "SDL2" PATHS "lib/x64")
 # find_library(SDL2_IMAGE NAMES "SDL2_image" PATHS "lib/x64")
 

@@ -78,11 +78,8 @@ struct _debug_file_line {
 
 #define dline() _debug_file_line(__FILE__, __LINE__)
 
-void post_error(const std::string& context, _debug_file_line dfileline) {
-    fetch_time();
-	std::cout << clockstr << " " << context << " Error: " << SDL_GetError() << "\n";
-	std::cout << "Fatal error in " << dfileline._FILE << "(" << dfileline._LINE << ")";
-    throw ISO::fatal_error();
+namespace ISO {
+    void post_error(const std::string& context, _debug_file_line dfileline);
 }
 
 #endif

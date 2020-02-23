@@ -1,16 +1,19 @@
 #include <iostream>
+#include <SDL2/SDL.h>
+#include "game.h"
 
-namespace ISOGame {
-	void setup() {
+ISOGame::ISOGame(ISO::instance* instance): instance(instance) {
+}
 
-	}
-	
-	void update() {
+void ISOGame::setup() {
 
-	}
+}
 
-	void draw() {
+void ISOGame::update() {
+	SDL_SetWindowTitle(instance->win, "Beenus");
+}
 
-	}
+void ISOGame::draw() {
+
 }
 

@@ -14,7 +14,7 @@ namespace ISO {
 		texture(SDL_Renderer* ren, const std::string& path){
 			tex_ = IMG_LoadTexture(ren, path.c_str());
 			if (tex_ == nullptr) 
-				post_error("LoadTexture", dline());
+				ISO::post_error("LoadTexture", dline());
 		}
 
 		~texture() {

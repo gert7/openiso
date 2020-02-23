@@ -1,7 +1,7 @@
-
 cmake_minimum_required (VERSION 3.8)
 
-project ("TheGame")
+project ("ISOGame" VERSION 0.1)
 
-add_library(TheGame STATIC game.cpp)
+add_library(Game STATIC "game.cpp" "game.h")
 
+target_include_directories(Game PRIVATE "../include")
