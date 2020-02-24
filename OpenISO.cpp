@@ -11,12 +11,23 @@
 
 #include "sdl_kbstate.hh"
 #include "instance.hh"
+#include "tilemap.hh"
+
 #undef main // per SDL.h
+
+constexpr int tilemap[4][4]
+{
+	{1, 0, 1, 0},
+	{1, 1, 1, 0},
+	{1, 0, 0, 0},
+	{0, 1, 1, 0}
+};
 
 int main()
 {
 	ISO::instance instance;
 	ISOGame game(&instance);
+	ISO::tilemap tilemap(ISO::append_resource("roman.csv"));
 
 	game.setup();
 
@@ -34,50 +45,15 @@ int main()
 	SDL_Event e;
 	bool quit = false;
 
+	// SDL_RenderSetScale(instance.ren, 3.0f, 3.0f);
+
 	for (;;) {
 		if (quit)
 			break;
 
 		SDL_RenderClear(instance.ren);
 		SDL_PollEvent(&e);
-		switch (e.type) {
-		case SDL_QUIT:
-			quit = true;
-			break;
-		case SDL_KEYDOWN:
-		{
-			char dir = (char)instance.main_camera_direction;
-
-			if (instance.kbstate.at(SDL_SCANCODE_RIGHT)) {
-				dir |= (char)ISO::direction::Right;
-				dir &= ~(char)ISO::direction::Left;
-			}
-			if (instance.kbstate.at(SDL_SCANCODE_LEFT)) {
-				dir |= (char)ISO::direction::Left;
-				dir &= ~(char)ISO::direction::Right;
-			}
-			if (instance.kbstate.at(SDL_SCANCODE_UP)) {
-				dir |= (char)ISO::direction::Up;
-				dir &= ~(char)ISO::direction::Down;
-			}
-			if (instance.kbstate.at(SDL_SCANCODE_DOWN)) {
-				dir |= (char)ISO::direction::Down;
-				dir &= ~(char)ISO::direction::Up;
-			}
-			instance.main_camera_direction = dir;
-		}
-			break;
-		case SDL_KEYUP:
-			if (!instance.kbstate.at(SDL_SCANCODE_RIGHT))
-				instance.main_camera_direction &= ~(char)ISO::direction::Right;
-			if (!instance.kbstate.at(SDL_SCANCODE_LEFT))
-				instance.main_camera_direction &= ~(char)ISO::direction::Left;
-			if (!instance.kbstate.at(SDL_SCANCODE_UP))
-				instance.main_camera_direction &= ~(char)ISO::direction::Up;
-			if (!instance.kbstate.at(SDL_SCANCODE_DOWN))
-				instance.main_camera_direction &= ~(char)ISO::direction::Down;
-			break;
-		}
+		quit = instance.handle_event(&e);
 
 		int cam_speed_x = instance.main_camera_speed.x;
 		int cam_speed_y = instance.main_camera_speed.y;
@@ -96,14 +72,15 @@ int main()
 
 		game.update();
 
-		for (int y = 0; y < 4; y++) {
+		for (int y = 0; y < tilemap.height; y++) {
 			a.x = 32 - (y * 16);
 			a.y = 32 + (y * 8);
-			for (int x = 0; x < 4; x++) {
+			for (int x = 0; x < tilemap.width; x++) {
 				a.x += 16;
 				a.y += 8;
 				ISO::apply_camera(&a, &destination_a, camera_x, camera_y);
-				SDL_RenderCopy(instance.ren, tex.tex(), NULL, &destination_a);
+				if(tilemap.map.at(y).at(x) > 0)
+					SDL_RenderCopy(instance.ren, tex.tex(), NULL, &destination_a);
 			}
 		}
 		a = { 32, 32, 32, 32 };

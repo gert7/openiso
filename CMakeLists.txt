@@ -2,7 +2,13 @@
 
 project ("OpenISO" VERSION 0.1)
 
+set(CXX_STANDARD 17)
+set(CXX_STANDARD_REQUIRED 17)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED 17)
+
 option(OISO_LUA_SUPPORT "Enable Lua support" YES)
+set(OISO_DEBUG_LEVEL 8 CACHE STRING "Debug level 8 = debug, 4 = note, 2 = warn, 1 = error")
 
 configure_file(cmake_bridge.h.in cmake_bridge.h)
 
@@ -10,7 +16,8 @@ configure_file(cmake_bridge.h.in cmake_bridge.h)
 add_executable (OpenISO "OpenISO.cpp" "OpenISO.h"
 		"instance.cpp" "instance.hh"
 		"debug.cpp" "debug.hpp"
-		"sdl_kbstate.cpp" "sdl_kbstate.hh")
+		"sdl_kbstate.cpp" "sdl_kbstate.hh"
+		"tilemap.cpp" "tilemap.hh")
 # target_sources (OpenISO PUBLIC "game/game.cpp")
 
 add_subdirectory("game")
@@ -19,6 +26,7 @@ target_link_libraries(OpenISO "${CMAKE_BINARY_DIR}/game/Game.lib")
 target_link_directories(OpenISO PUBLIC "lib")
 target_link_directories(OpenISO PUBLIC "lib/x64")
 target_include_directories(OpenISO PRIVATE "include")
+target_include_directories(OpenISO PUBLIC ${PROJECT_BINARY_DIR})
 
 if(MSVC)
 	configure_file("lib/x64/SDL2.dll" "${CMAKE_BINARY_DIR}/SDL2.dll" COPYONLY)

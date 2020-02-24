@@ -2,16 +2,18 @@
 #define _RESOURCEPATH_H
 
 #include <string>
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 namespace ISO {
-	const char* resource_path() {
-		return "./";
+	const fs::path resource_path() {
+		return fs::current_path() / "res";
 	}
 
-	std::string append_resource(std::string suffix) {
-		std::string uri;
-		uri += resource_path();	
-		uri += suffix;
+	fs::path append_resource(fs::path suffix) {
+		fs::path uri = resource_path();
+		uri /= suffix;
 		return uri;
 	}
 }

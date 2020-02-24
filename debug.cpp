@@ -7,4 +7,6 @@ namespace ISO {
         std::cout << "Fatal error in " << dfileline._FILE << "(" << dfileline._LINE << ")";
         throw ISO::fatal_error();
     }
+
+    std::stringstream dss0 = std::stringstream();
 }

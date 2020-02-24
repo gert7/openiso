@@ -31,6 +31,7 @@ namespace ISO {
 		char main_camera_direction{ (char)direction::None };
 
 		sdl_kbstate kbstate = sdl_kbstate();
+		bool instance::handle_event(SDL_Event* e);
 
 		~instance();
 	};

@@ -15,5 +15,47 @@ namespace ISO {
 			SDL_DestroyRenderer(ren);
 		SDL_Quit();
 	}
+
+	bool instance::handle_event(SDL_Event* e) {
+		switch (e->type) {
+		case SDL_QUIT:
+			return true;
+			break;
+		case SDL_KEYDOWN:
+		{
+			char dir = (char)main_camera_direction;
+
+			if (kbstate.at(SDL_SCANCODE_RIGHT)) {
+				dir |= (char)ISO::direction::Right;
+				dir &= ~(char)ISO::direction::Left;
+			}
+			if (kbstate.at(SDL_SCANCODE_LEFT)) {
+				dir |= (char)ISO::direction::Left;
+				dir &= ~(char)ISO::direction::Right;
+			}
+			if (kbstate.at(SDL_SCANCODE_UP)) {
+				dir |= (char)ISO::direction::Up;
+				dir &= ~(char)ISO::direction::Down;
+			}
+			if (kbstate.at(SDL_SCANCODE_DOWN)) {
+				dir |= (char)ISO::direction::Down;
+				dir &= ~(char)ISO::direction::Up;
+			}
+			main_camera_direction = dir;
+		}
+			break;
+		case SDL_KEYUP:
+			if (!kbstate.at(SDL_SCANCODE_RIGHT))
+				main_camera_direction &= ~(char)ISO::direction::Right;
+			if (!kbstate.at(SDL_SCANCODE_LEFT))
+				main_camera_direction &= ~(char)ISO::direction::Left;
+			if (!kbstate.at(SDL_SCANCODE_UP))
+				main_camera_direction &= ~(char)ISO::direction::Up;
+			if (!kbstate.at(SDL_SCANCODE_DOWN))
+				main_camera_direction &= ~(char)ISO::direction::Down;
+			break;
+		}
+		return false;
+	}
 }
 
