@@ -30,9 +30,14 @@ namespace ISO {
 		pixel_camera_speed main_camera_speed{ 4, 4 };
 		char main_camera_direction{ (char)direction::None };
 
+		SDL_Event l_event;
+		bool quit = false;
+
 		sdl_kbstate kbstate = sdl_kbstate();
 		bool instance::handle_event(SDL_Event* e);
+		void update_camera();
 
+		instance();
 		~instance();
 	};
 }

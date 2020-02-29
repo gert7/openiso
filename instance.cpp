@@ -8,6 +8,11 @@ namespace ISO {
 		destination->y = source->y - y;
 	}
 
+	instance::instance() {
+		SDL_memset(&l_event, 0, sizeof(l_event));
+		l_event.type = SDL_USEREVENT;
+	}
+
 	instance::~instance() {
 		if (win != nullptr)
 			SDL_DestroyWindow(win);
@@ -43,7 +48,7 @@ namespace ISO {
 			}
 			main_camera_direction = dir;
 		}
-			break;
+		break;
 		case SDL_KEYUP:
 			if (!kbstate.at(SDL_SCANCODE_RIGHT))
 				main_camera_direction &= ~(char)ISO::direction::Right;
@@ -56,6 +61,19 @@ namespace ISO {
 			break;
 		}
 		return false;
+	}
+
+	void instance::update_camera() {
+		int cam_speed_x = main_camera_speed.x;
+		int cam_speed_y = main_camera_speed.y;
+		if (main_camera_direction & (char)ISO::direction::Left)
+			main_camera.x -= cam_speed_x;
+		if (main_camera_direction & (char)ISO::direction::Right)
+			main_camera.x += cam_speed_x;
+		if (main_camera_direction & (char)ISO::direction::Up)
+			main_camera.y -= cam_speed_y;
+		if (main_camera_direction & (char)ISO::direction::Down)
+			main_camera.y += cam_speed_y;
 	}
 }
 

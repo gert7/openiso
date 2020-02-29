@@ -38,6 +38,10 @@ namespace ISO {
 			}
 
 			csv >> std::noskipws >> value >> unit;
+			if (csv.eof()) {
+				height = y;
+				break;
+			}
 
 			if (unit == '\n') {
 				map.at(y).emplace_back(value);
