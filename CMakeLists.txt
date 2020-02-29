@@ -17,7 +17,8 @@ add_executable (OpenISO "OpenISO.cpp" "OpenISO.h"
 		"instance.cpp" "instance.hh"
 		"debug.cpp" "debug.hpp"
 		"sdl_kbstate.cpp" "sdl_kbstate.hh"
-		"tilemap.cpp" "tilemap.hh")
+		"tilemap.cpp" "tilemap.hh"
+		"room.hh" "structures.hh")
 
 # target_sources (OpenISO PUBLIC "game/game.cpp")
 

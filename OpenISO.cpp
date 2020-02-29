@@ -1,7 +1,4 @@
-﻿// OpenISO.cpp : Defines the entry point for the application.
-//
-
-#include "OpenISO.h"
+﻿#include "OpenISO.h"
 #include "debug.hpp"
 #include "resourcepath.h"
 #include "texture.h"
@@ -20,6 +17,7 @@ int main()
 	ISO::instance instance;
 	ISOGame game(&instance);
 	ISO::tilemap tilemap(ISO::append_resource("roman.csv"));
+	ISO::tilemap::convert_to_binary(tilemap);
 
 	game.setup();
 
@@ -36,13 +34,12 @@ int main()
 	SDL_Rect a = { 32, 32, 32, 32 };
 	bool quit = false;
 
-	// SDL_RenderSetScale(instance.ren, 3.0f, 3.0f);
-
 	for (;;) {
-		if(SDL_PollEvent(&instance.l_event))
+		if (SDL_PollEvent(&instance.l_event)) {
+			game.update();
 			instance.quit = instance.handle_event(&instance.l_event);
+		}
 
-		game.update();
 		if (instance.quit)
 			break;
 
@@ -60,7 +57,7 @@ int main()
 			for (int x = 0; x < tilemap.width; x++) {
 				a.x += 16;
 				a.y += 8;
-				ISO::apply_camera(&a, &destination_a, camera_x, camera_y);
+				ISO::apply_camera_rectangle(&a, &destination_a, camera_x, camera_y);
 				if(tilemap.map.at(y).at(x) > 0)
 					SDL_RenderCopy(instance.ren, tex.tex(), NULL, &destination_a);
 			}

@@ -1,7 +1,7 @@
 #include "instance.hh"
 
 namespace ISO {
-	void apply_camera(SDL_Rect* source, SDL_Rect* destination, int x, int y) {
+	void apply_camera_rectangle(SDL_Rect* source, SDL_Rect* destination, int x, int y) {
 		destination->w = source->w;
 		destination->h = source->h;
 		destination->x = source->x - x;
@@ -19,6 +19,10 @@ namespace ISO {
 		if (ren != nullptr)
 			SDL_DestroyRenderer(ren);
 		SDL_Quit();
+	}
+
+	void instance::reset_event() {
+
 	}
 
 	bool instance::handle_event(SDL_Event* e) {

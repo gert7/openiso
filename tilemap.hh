@@ -18,7 +18,7 @@ namespace ISO {
 
 		tilemap(int width, int height);
 		tilemap(fs::path path);
-		static void convert_to_binary(tilemap &const);
+		static void convert_to_binary(tilemap const&);
 		static void convert_from_binary(fs::path path);
 	};
 }

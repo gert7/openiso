@@ -2,6 +2,7 @@
 #include "debug.hpp"
 #include "OpenISO.h"
 
+#include <algorithm>
 #include <sstream>
 #include <string>
 #include <fstream>
@@ -69,6 +70,20 @@ namespace ISO {
 		}
 		this->height = height;
 		this->width = width;
+	}
+
+	void tilemap::convert_to_binary(tilemap const& inmap) {
+		std::vector<char> result;
+		result.push_back((char) inmap.width); // lsb
+		result.push_back((char) (inmap.width >> 8)); // msb
+		result.push_back((char) inmap.height); // lsb
+		result.push_back((char) (inmap.height >> 8)); // msb
+		for (const auto& y : inmap.map)
+			for (const auto& x : y)
+				result.push_back((char) x);
+
+		auto beep = std::fstream("tilemap.tmap", std::fstream::out);
+		beep.write(result.data(), result.size());
 	}
 
 	// void tilemap::convert_to_binary() {
