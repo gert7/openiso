@@ -23,7 +23,6 @@ namespace ISO {
 
 	tilemap::tilemap(fs::path path) {
 		std::fstream csv(path.c_str(), std::ios::in);
-		debug(path);
 		map = std::vector<std::vector<int>>();
 		map.emplace_back(); // y = 0
 
@@ -72,7 +71,7 @@ namespace ISO {
 		this->width = width;
 	}
 
-	void tilemap::convert_to_binary(tilemap const& inmap) {
+	void tilemap::convert_to_binary(tilemap const& inmap, fs::path path) {
 		std::vector<char> result;
 		result.push_back((char) inmap.width); // lsb
 		result.push_back((char) (inmap.width >> 8)); // msb
@@ -82,11 +81,26 @@ namespace ISO {
 			for (const auto& x : y)
 				result.push_back((char) x);
 
-		auto beep = std::fstream("tilemap.tmap", std::fstream::out);
+		auto beep = std::ofstream("tilemap.tmap", std::ofstream::out);
 		beep.write(result.data(), result.size());
 	}
 
-	// void tilemap::convert_to_binary() {
-	// }
+	tilemap tilemap::convert_from_binary(fs::path path) {
+		std::ifstream tmap(path.c_str(), std::ios::in);
+		uint8_t wls, wms, hls, hms;
+		uint8_t single;
+		int width, height;
 
+		tmap >> wls >> wms >> hls >> hms;
+		width = wls + (wms << 8);
+		height = hls + (hms << 8);
+		auto result = tilemap(width, height);
+		for(auto& y : result.map)
+			for (auto& x : y) {
+				tmap >> single;
+				x = single;
+			}
+
+		return result;
+	}
 }

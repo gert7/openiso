@@ -15,10 +15,10 @@ void ISOGame::update() {
 }
 
 void ISOGame::draw() {
-	SDL_SetRenderDrawColor(instance->ren, 0, 225, 32, 255);
-	SDL_RenderFillRect(instance->ren, &e);
-	SDL_SetRenderDrawColor(instance->ren, 0, 255, 0, 255);
-	SDL_RenderFillRect(instance->ren, &border1);
-	SDL_SetRenderDrawColor(instance->ren, 0, 0, 0, 0);
+	//SDL_SetRenderDrawColor(instance->ren, 0, 225, 32, 255);
+	//SDL_RenderFillRect(instance->ren, &e);
+	//SDL_SetRenderDrawColor(instance->ren, 0, 255, 0, 255);
+	//SDL_RenderFillRect(instance->ren, &border1);
+	//SDL_SetRenderDrawColor(instance->ren, 0, 0, 0, 0);
 }
 

@@ -16,8 +16,10 @@ int main()
 {
 	ISO::instance instance;
 	ISOGame game(&instance);
-	ISO::tilemap tilemap(ISO::append_resource("roman.csv"));
-	ISO::tilemap::convert_to_binary(tilemap);
+	ISO::tilemap tmap(ISO::append_resource("roman.csv"));
+	auto tmap_uri = "tilemap.tmap";
+	ISO::tilemap::convert_to_binary(tmap, tmap_uri);
+	auto tilemap = ISO::tilemap::convert_from_binary(tmap_uri);
 
 	game.setup();
 
@@ -32,13 +34,16 @@ int main()
 	auto tex = ISO::texture(instance.ren, tile_png_path);
 
 	SDL_Rect a = { 32, 32, 32, 32 };
-	bool quit = false;
 
 	for (;;) {
-		if (SDL_PollEvent(&instance.l_event)) {
-			game.update();
+		if (SDL_PollEvent(&instance.l_event))
+			instance.event_present = true;
+		else
+			instance.event_present = false;
+
+		game.update();
+		if(instance.event_present)
 			instance.quit = instance.handle_event(&instance.l_event);
-		}
 
 		if (instance.quit)
 			break;

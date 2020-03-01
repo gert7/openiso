@@ -10,7 +10,6 @@ namespace ISO {
 
 	instance::instance() {
 		SDL_memset(&l_event, 0, sizeof(l_event));
-		l_event.type = SDL_USEREVENT;
 	}
 
 	instance::~instance() {
@@ -21,8 +20,12 @@ namespace ISO {
 		SDL_Quit();
 	}
 
-	void instance::reset_event() {
+	void instance::set_event() {
+		event_present = true;
+	}
 
+	void instance::reset_event() {
+		event_present = false;
 	}
 
 	bool instance::handle_event(SDL_Event* e) {

@@ -18,10 +18,14 @@ namespace ISO {
 		char main_camera_direction{ (char)direction::None };
 
 		SDL_Event l_event;
+		bool event_present = false;
 		bool quit = false;
 		bool camera_locked = false;
 
 		sdl_kbstate kbstate = sdl_kbstate();
+		/** 
+			State that an event is present to be handled. */
+		void instance::set_event();
 		/**
 			Zero out the oncoming event. */
 		void instance::reset_event();
